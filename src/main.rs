@@ -33,7 +33,7 @@ fn main() {
         println!("📋 Copied To Clipboard.");
     }
 
-    thread::sleep(Duration::from_secs(10)) //make the terminal stay open
+    thread::sleep(Duration::from_secs(999)) //make the terminal stay open
 }
 
 
