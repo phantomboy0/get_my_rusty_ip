@@ -1,3 +1,5 @@
+use std::thread;
+use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use cli_clipboard::{ClipboardContext, ClipboardProvider};
 
@@ -30,6 +32,8 @@ fn main() {
 
         println!("📋 Copied To Clipboard.");
     }
+
+    thread::sleep(Duration::from_secs(10)) //make the terminal stay open
 }
 
 
@@ -41,8 +45,8 @@ fn get_my_ip () ->String {
         Ok(v) => unwrapped_request = v,
     }
 
-   if unwrapped_request.status().is_success() {
-    let body: IpAddress = unwrapped_request.json().unwrap();
+   if unwrapped_request.status().is_success() { 
+       let body: IpAddress = unwrapped_request.json().unwrap();
        body.ip
    } else {
        String::from("Unavailable")
