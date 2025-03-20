@@ -15,14 +15,14 @@ fn main() {
 ██╔████╔██║ ╚████╔╝     ██║██████╔╝
 ██║╚██╔╝██║  ╚██╔╝      ██║██╔═══╝
 ██║ ╚═╝ ██║   ██║       ██║██║
-╚═╝     ╚═╝   ╚═╝       ╚═╝╚═╝
-");
+╚═╝     ╚═╝   ╚═╝       ╚═╝╚═╝");
     println!("🧭 Get My Rusty IP v1");
     println!();
 
-    let ip: String = get_my_ip();
+    let ip = get_my_ip().unwrap_or_else(|_e| "Unavailable".to_owned());
 
-    println!("🛸 Your Public IP is {}", ip);
+
+    println!("🛸 Your Public IP is {ip}");
     println!();
 
     if ip != "Unavailable" {
@@ -37,18 +37,9 @@ fn main() {
 }
 
 
-fn get_my_ip () ->String {
-    let request = reqwest::blocking::get("https://api.ipify.org?format=json");
-    let unwrapped_request;
-    match request {
-        Err(_e) => return String::from("Unavailable"),
-        Ok(v) => unwrapped_request = v,
-    }
+fn get_my_ip () -> Result<String, reqwest::Error> {
+    let request = reqwest::blocking::get("https://api.ipify.org?format=json")?;
 
-   if unwrapped_request.status().is_success() { 
-       let body: IpAddress = unwrapped_request.json().unwrap();
-       body.ip
-   } else {
-       String::from("Unavailable")
-   }
+    let body: IpAddress = request.json()?;
+    Ok(body.ip)
 }
